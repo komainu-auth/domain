@@ -49,7 +49,6 @@ impl<T: AsRef<[u8]> + Zeroize> Drop for Secret<T> {
     }
 }
 
-
 #[cfg(test)]
 mod tests {
     use super::*;

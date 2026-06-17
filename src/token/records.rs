@@ -238,14 +238,8 @@ mod tests {
 
     #[test]
     fn debug_does_not_leak_token_secret() {
-        let access = AccessTokenRecord::new(
-            access_token(),
-            client_id(),
-            None,
-            scope(),
-            ts(100),
-            ts(200),
-        );
+        let access =
+            AccessTokenRecord::new(access_token(), client_id(), None, scope(), ts(100), ts(200));
         let refresh = RefreshTokenRecord::new(
             refresh_token(),
             client_id(),

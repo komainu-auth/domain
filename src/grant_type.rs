@@ -43,15 +43,9 @@ mod tests {
 
     #[test]
     fn equal_variants_are_equal() {
-        assert_eq!(
-            GrantType::AuthorizationCode,
-            GrantType::AuthorizationCode
-        );
+        assert_eq!(GrantType::AuthorizationCode, GrantType::AuthorizationCode);
         assert_eq!(GrantType::Password, GrantType::Password);
-        assert_eq!(
-            GrantType::ClientCredentials,
-            GrantType::ClientCredentials
-        );
+        assert_eq!(GrantType::ClientCredentials, GrantType::ClientCredentials);
         assert_eq!(GrantType::RefreshToken, GrantType::RefreshToken);
     }
 

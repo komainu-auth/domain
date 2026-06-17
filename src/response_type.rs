@@ -46,4 +46,3 @@ mod tests {
         assert_eq!(original, original.clone());
     }
 }
-

@@ -1,11 +1,11 @@
 pub mod client;
 pub mod code;
 pub mod entity;
+pub mod request;
 pub mod secret;
 pub mod token;
-pub mod value_object;
 pub mod user;
-pub mod request;
+pub mod value_object;
 
 mod grant_type;
 mod redirect_uri;

@@ -91,7 +91,10 @@ mod tests {
     #[test]
     fn set_value_rejects_invalid_and_keeps_old_value() {
         let mut user_id = UserId::new("a".to_string()).unwrap();
-        assert_eq!(user_id.set_value("   ".to_string()), Err(UserIdError::Empty));
+        assert_eq!(
+            user_id.set_value("   ".to_string()),
+            Err(UserIdError::Empty)
+        );
         assert_eq!(user_id.value(), "a"); // 元の値が保持される
     }
 

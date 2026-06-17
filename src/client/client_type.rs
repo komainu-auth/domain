@@ -5,7 +5,7 @@ use crate::value_object::ValueEnum;
 #[derive(Debug, Clone, PartialEq, Eq, Hash)]
 pub enum ClientType {
     Public,
-    Confidential
+    Confidential,
 }
 
 impl ValueEnum for ClientType {}

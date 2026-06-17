@@ -176,9 +176,11 @@ mod tests {
         );
 
         let invalid = RedirectUri::new("not-a-url".to_string()).unwrap_err();
-        assert!(invalid
-            .to_string()
-            .starts_with("redirect_uri is invalid format:"));
+        assert!(
+            invalid
+                .to_string()
+                .starts_with("redirect_uri is invalid format:")
+        );
     }
 
     #[test]

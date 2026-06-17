@@ -250,7 +250,10 @@ mod tests {
     #[test]
     fn refresh_token_grant_exposes_refresh_token() {
         let req = TokenRequest::new_refresh_token(sample_refresh_token(), None);
-        assert_eq!(req.refresh_token().unwrap().expose_secret(), "refresh-token");
+        assert_eq!(
+            req.refresh_token().unwrap().expose_secret(),
+            "refresh-token"
+        );
     }
 
     #[test]
@@ -320,11 +323,8 @@ mod tests {
 
     #[test]
     fn scope_is_propagated() {
-        let req = TokenRequest::new_password(
-            sample_user_name(),
-            "pw".to_string(),
-            Some(sample_scope()),
-        );
+        let req =
+            TokenRequest::new_password(sample_user_name(), "pw".to_string(), Some(sample_scope()));
         assert_eq!(req.scope(), Some(&sample_scope()));
     }
 
