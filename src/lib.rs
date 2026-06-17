@@ -1,3 +1,24 @@
+//! OAuth 2.0 domain model crate.
+//!
+//! This crate provides types, traits, and errors that form the domain layer of
+//! the OAuth 2.0 authorization framework based on RFC 6749.
+//!
+//! # Modules
+//!
+//! - [`client`] — OAuth client entity and related value objects
+//! - [`code`] — authorization codes and their issuance records
+//! - [`entity`] — entity foundation trait
+//! - [`error`] — OAuth 2.0 error codes and error types
+//! - [`request`] — authorization requests and token requests
+//! - [`secret`] — generic wrapper for holding secrets safely
+//! - [`token`] — access tokens, refresh tokens, and related records
+//! - [`user`] — user entity and related value objects
+//! - [`value_object`] — value object foundation traits
+//!
+//! Types re-exported from the crate root ([`GrantType`], [`RedirectUri`],
+//! [`ResponseType`], [`Scope`], [`State`]) are the most frequently used and
+//! can be imported directly from the top level of the crate.
+
 pub mod client;
 pub mod code;
 pub mod entity;

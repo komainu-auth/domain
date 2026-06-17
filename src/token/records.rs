@@ -8,6 +8,16 @@ use crate::{
     user::UserId,
 };
 
+/// Entity holding access token issuance information.
+///
+/// Stored for token validation and revocation checks. When `user_id` is `None`,
+/// the token was issued via the client credentials grant (not bound to a user).
+///
+/// # Entity Identity
+///
+/// [`Entity::id`] returns [`AccessToken`].
+///
+/// [`Entity::id`]: crate::entity::Entity::id
 #[derive(Debug, Clone)]
 pub struct AccessTokenRecord {
     token: AccessToken,
@@ -64,6 +74,16 @@ impl Entity for AccessTokenRecord {
     }
 }
 
+/// Entity holding refresh token issuance information.
+///
+/// Stored for token validation and revocation checks. When `user_id` is `None`,
+/// the token was issued via the client credentials grant (not bound to a user).
+///
+/// # Entity Identity
+///
+/// [`Entity::id`] returns [`RefreshToken`].
+///
+/// [`Entity::id`]: crate::entity::Entity::id
 #[derive(Debug, Clone)]
 pub struct RefreshTokenRecord {
     token: RefreshToken,

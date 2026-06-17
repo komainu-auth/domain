@@ -2,11 +2,19 @@ use crate::value_object::{ValueObject, ValueObjectError};
 use std::fmt;
 use url::Url;
 
+/// Validation error for [`RedirectUri`].
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub enum RedirectUriError {
+    /// The URI is empty or whitespace only.
     Empty,
+    /// The URI cannot be parsed as a valid URL.
     InvalidFormat(url::ParseError),
+    /// The URI scheme is not allowed (other than `http` / `https`).
+    ///
+    /// > **Note**: Allowed schemes are the application layer's responsibility,
+    /// > so the domain layer does not currently use this variant.
     UnsupportedScheme(String),
+    /// The URI contains a fragment (`#`), which is forbidden by RFC 6749 Section 3.1.2.
     FragmentNotAllowed,
 }
 
@@ -41,6 +49,25 @@ impl std::error::Error for RedirectUriError {
     }
 }
 
+/// Value object representing an OAuth 2.0 redirect URI (RFC 6749 Section 3.1.2).
+///
+/// Performs the following validation at construction time:
+///
+/// - Rejects empty or whitespace-only values ([`RedirectUriError::Empty`])
+/// - Requires a valid URL ([`RedirectUriError::InvalidFormat`])
+/// - Must not contain a fragment (`#`) ([`RedirectUriError::FragmentNotAllowed`])
+///
+/// Leading and trailing whitespace is trimmed automatically.
+///
+/// # Examples
+///
+/// ```rust,ignore
+/// use domain::RedirectUri;
+/// use domain::value_object::ValueObject;
+///
+/// let uri = RedirectUri::new("https://example.com/callback".to_string()).unwrap();
+/// assert_eq!(uri.value(), "https://example.com/callback");
+/// ```
 #[derive(Debug, Clone, PartialEq, Eq, Hash)]
 pub struct RedirectUri(String);
 

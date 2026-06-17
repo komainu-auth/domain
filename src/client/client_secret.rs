@@ -2,8 +2,10 @@ use crate::secret::Secret;
 use crate::value_object::{SecretValueObject, ValueObjectError};
 use std::fmt;
 
+/// Validation error for [`ClientSecret`].
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub enum ClientSecretError {
+    /// The client secret is empty or whitespace only.
     Empty,
 }
 
@@ -19,6 +21,15 @@ impl fmt::Display for ClientSecretError {
 
 impl std::error::Error for ClientSecretError {}
 
+/// Secret value object representing an OAuth 2.0 client secret (RFC 6749 Section 2.3.1).
+///
+/// Wrapped in [`Secret<String>`], so `Debug` and `Display` output `"[REDACTED]"`.
+/// Use [`expose_secret`] to extract the secret.
+///
+/// Only confidential clients ([`crate::client::ClientType::Confidential`]) hold
+/// this secret.
+///
+/// [`expose_secret`]: crate::value_object::SecretValueObject::expose_secret
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct ClientSecret(Secret<String>);
 

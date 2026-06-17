@@ -2,9 +2,20 @@ use std::fmt;
 
 use crate::value_object::ValueEnum;
 
+/// OAuth 2.0 response type defined in RFC 6749.
+///
+/// Used as the `response_type` parameter in requests to the authorization
+/// endpoint. The [`Display`] implementation returns the RFC wire-format string.
+///
+/// | Variant | Wire Value | Purpose |
+/// |---|---|---|
+/// | `Code` | `code` | Authorization code flow (RFC 6749 Section 4.1) |
+/// | `Token` | `token` | Implicit flow (RFC 6749 Section 4.2) |
 #[derive(Debug, Clone, PartialEq, Eq, Hash)]
 pub enum ResponseType {
+    /// Response type for the authorization code flow (`code`).
     Code,
+    /// Response type for the implicit flow (`token`).
     Token,
 }
 

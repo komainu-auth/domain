@@ -2,8 +2,10 @@ use crate::secret::Secret;
 use crate::value_object::{SecretValueObject, ValueObjectError};
 use std::fmt;
 
+/// Validation error for [`RefreshToken`].
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub enum RefreshTokenError {
+    /// The refresh token is empty or whitespace only.
     Empty,
 }
 
@@ -19,6 +21,13 @@ impl fmt::Display for RefreshTokenError {
 
 impl std::error::Error for RefreshTokenError {}
 
+/// Secret value object representing an OAuth 2.0 refresh token (RFC 6749 Section 1.5).
+///
+/// Used to obtain a new access token when the current one expires. Wrapped in
+/// [`Secret<String>`], so `Debug` and `Display` output `"[REDACTED]"`. Use
+/// [`expose_secret`] to extract the value.
+///
+/// [`expose_secret`]: crate::value_object::SecretValueObject::expose_secret
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct RefreshToken(Secret<String>);
 

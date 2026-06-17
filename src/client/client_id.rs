@@ -1,8 +1,10 @@
 use crate::value_object::{ValueObject, ValueObjectError};
 use std::fmt;
 
+/// Validation error for [`ClientId`].
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub enum ClientIdError {
+    /// The client ID is empty or whitespace only.
     Empty,
 }
 
@@ -18,6 +20,20 @@ impl std::fmt::Display for ClientIdError {
 
 impl std::error::Error for ClientIdError {}
 
+/// Value object representing an OAuth 2.0 client identifier (RFC 6749 Section 2.2).
+///
+/// Rejects empty or whitespace-only values at construction time. Leading and
+/// trailing whitespace is trimmed automatically.
+///
+/// # Examples
+///
+/// ```rust,ignore
+/// use domain::client::ClientId;
+/// use domain::value_object::ValueObject;
+///
+/// let id = ClientId::new("my-client-id".to_string()).unwrap();
+/// assert_eq!(id.value(), "my-client-id");
+/// ```
 #[derive(Debug, Clone, PartialEq, Eq, Hash)]
 pub struct ClientId(String);
 

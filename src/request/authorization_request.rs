@@ -1,5 +1,17 @@
 use crate::{RedirectUri, ResponseType, Scope, State, client::ClientId};
 
+/// Object representing a request to the OAuth 2.0 authorization endpoint.
+///
+/// Supports RFC 6749 Section 4.1.1 (authorization code request) and
+/// Section 4.2.1 (implicit request).
+///
+/// # Fields
+///
+/// - `response_type` — response type (`code` / `token`)
+/// - `client_id` — identifier of the requesting client
+/// - `redirect_uri` — URI to send the authorization response to (optional; uses the registered client value when omitted)
+/// - `scope` — requested access scope (optional)
+/// - `state` — opaque value for CSRF protection (optional but recommended)
 #[derive(Debug, Clone)]
 pub struct AuthorizationRequest {
     response_type: ResponseType,

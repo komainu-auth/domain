@@ -5,6 +5,18 @@ use crate::{
     token::{AccessToken, RefreshToken, TokenType},
 };
 
+/// Object representing token endpoint response data (RFC 6749 Section 5.1).
+///
+/// Holds the response content when the authorization server issues tokens. Used
+/// by the application layer to map to response JSON.
+///
+/// # Fields
+///
+/// - `access_token` — issued access token
+/// - `token_type` — token type (usually `Bearer`)
+/// - `expires_in` — access token lifetime
+/// - `refresh_token` — issued refresh token (optional)
+/// - `scope` — granted scope (optional; may be omitted when it matches the request)
 #[derive(Debug, Clone)]
 pub struct IssuedToken {
     access_token: AccessToken,

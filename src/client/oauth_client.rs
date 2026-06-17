@@ -6,9 +6,12 @@ use crate::{
     entity::{Entity, EntityError},
 };
 
+/// Consistency validation error for [`OAuthClient`].
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub enum OAuthClientError {
+    /// Attempted to set a secret on a public client.
     PublicClientCannotHaveSecret,
+    /// A confidential client has no secret set.
     ConfidentialClientMustHaveSecret,
 }
 
@@ -27,6 +30,25 @@ impl std::fmt::Display for OAuthClientError {
 impl std::error::Error for OAuthClientError {}
 impl EntityError for OAuthClientError {}
 
+/// OAuth 2.0 client entity.
+///
+/// Holds client information based on RFC 6749 Section 2. Validates the
+/// presence or absence of a secret according to [`ClientType`].
+///
+/// # Consistency Rules
+///
+/// - [`ClientType::Confidential`] clients must always have a secret.
+/// - [`ClientType::Public`] clients must not have a secret.
+///
+/// This validation runs in [`new`] and [`rotate_secret`].
+///
+/// # Entity Identity
+///
+/// [`Entity::id`] returns [`ClientId`].
+///
+/// [`new`]: OAuthClient::new
+/// [`rotate_secret`]: OAuthClient::rotate_secret
+/// [`Entity::id`]: crate::entity::Entity::id
 #[derive(Debug, Clone)]
 pub struct OAuthClient {
     client_id: ClientId,
@@ -40,6 +62,16 @@ pub struct OAuthClient {
 }
 
 impl OAuthClient {
+    /// Creates a new [`OAuthClient`].
+    ///
+    /// Validates consistency between `client_type` and `client_secret`.
+    ///
+    /// # Errors
+    ///
+    /// - When a confidential client has `None` for the secret:
+    ///   [`OAuthClientError::ConfidentialClientMustHaveSecret`]
+    /// - When a public client has `Some` for the secret:
+    ///   [`OAuthClientError::PublicClientCannotHaveSecret`]
     pub fn new(
         client_id: ClientId,
         client_secret: Option<ClientSecret>,
@@ -108,6 +140,14 @@ impl OAuthClient {
 }
 
 impl OAuthClient {
+    /// Rotates the client secret.
+    ///
+    /// Only available for confidential clients.
+    ///
+    /// # Errors
+    ///
+    /// When called on a public client:
+    /// [`OAuthClientError::PublicClientCannotHaveSecret`]
     pub fn rotate_secret(&mut self, new_secret: ClientSecret) -> Result<(), OAuthClientError> {
         match self.is_confidential() {
             true => {
@@ -211,10 +251,21 @@ impl OAuthClient {
 }
 
 impl OAuthClient {
+    /// Returns whether this is a confidential client.
     pub fn is_confidential(&self) -> bool {
         matches!(self.client_type, ClientType::Confidential)
     }
 
+    /// Validates consistency between client type and secret.
+    ///
+    /// Used internally by [`new`] and [`rotate_secret`].
+    ///
+    /// # Errors
+    ///
+    /// Returns the corresponding [`OAuthClientError`] when consistency is violated.
+    ///
+    /// [`new`]: OAuthClient::new
+    /// [`rotate_secret`]: OAuthClient::rotate_secret
     pub fn is_consistent(
         client_type: &ClientType,
         client_secret: &Option<ClientSecret>,

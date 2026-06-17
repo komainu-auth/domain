@@ -1,8 +1,10 @@
 use crate::value_object::{ValueObject, ValueObjectError};
 use std::fmt;
 
+/// Validation error for [`State`].
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub enum StateError {
+    /// The state is empty or whitespace only.
     Empty,
 }
 
@@ -18,6 +20,23 @@ impl std::fmt::Display for StateError {
 
 impl std::error::Error for StateError {}
 
+/// Value object representing the OAuth 2.0 state parameter (RFC 6749 Section 10.12).
+///
+/// Used to attach a random opaque value to authorization requests as a
+/// cross-site request forgery (CSRF) countermeasure.
+///
+/// Rejects empty or whitespace-only values at construction time. Leading and
+/// trailing whitespace is trimmed automatically.
+///
+/// # Examples
+///
+/// ```rust,ignore
+/// use domain::State;
+/// use domain::value_object::ValueObject;
+///
+/// let state = State::new("abc123xyz".to_string()).unwrap();
+/// assert_eq!(state.value(), "abc123xyz");
+/// ```
 #[derive(Debug, Clone, PartialEq, Eq, Hash)]
 pub struct State(String);
 

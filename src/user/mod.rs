@@ -1,3 +1,10 @@
+//! Types related to users.
+//!
+//! - [`User`] — user entity
+//! - [`UserId`] — user identifier (value object)
+//! - [`UserName`] — username (value object)
+//! - [`PasswordHash`] — password hash (secret value object)
+
 mod password_hash;
 #[allow(clippy::module_inception)]
 mod user;

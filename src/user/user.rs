@@ -3,6 +3,21 @@ use crate::{
     user::{PasswordHash, UserId, UserName},
 };
 
+/// Entity representing the resource owner (end user).
+///
+/// Represents the party that authorizes access to protected resources as the
+/// OAuth 2.0 resource owner.
+///
+/// # Entity Identity
+///
+/// [`Entity::id`] returns [`UserId`].
+///
+/// # Password Hash
+///
+/// `password_hash` is `Option` because users authenticated via an external
+/// identity provider do not need one.
+///
+/// [`Entity::id`]: crate::entity::Entity::id
 #[derive(Debug, Clone)]
 pub struct User {
     user_id: UserId,
@@ -27,9 +42,14 @@ impl User {
     pub fn password_hash(&self) -> Option<&PasswordHash> {
         self.password_hash.as_ref()
     }
+    /// Changes the username.
     pub fn change_user_name(&mut self, new_name: UserName) {
         self.user_name = new_name
     }
+
+    /// Updates the password hash.
+    ///
+    /// Used for both initial assignment (`None` → `Some`) and password rotation.
     pub fn rotate_password_hash(&mut self, new_hash: PasswordHash) {
         self.password_hash = Some(new_hash)
     }

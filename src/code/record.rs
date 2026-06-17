@@ -4,6 +4,27 @@ use crate::{
     RedirectUri, Scope, client::ClientId, code::AuthorizationCode, entity::Entity, user::UserId,
 };
 
+/// Entity holding authorization code issuance information.
+///
+/// Used to persist information when the authorization server issues an
+/// authorization code in the authorization code grant flow (RFC 6749 Section 4.1).
+///
+/// # Entity Identity
+///
+/// [`Entity::id`] returns [`AuthorizationCode`], which serves as the unique
+/// identifier.
+///
+/// # Fields
+///
+/// - `code` — authorization code (secret)
+/// - `client_id` — identifier of the client that requested the code
+/// - `user_id` — identifier of the authenticated resource owner
+/// - `redirect_uri` — redirect URI associated with the code
+/// - `scope` — granted scope
+/// - `issued_at` — issuance timestamp
+/// - `expires_at` — expiration timestamp
+///
+/// [`Entity::id`]: crate::entity::Entity::id
 #[derive(Debug, Clone)]
 pub struct AuthorizationCodeRecord {
     code: AuthorizationCode,

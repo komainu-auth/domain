@@ -2,8 +2,17 @@ use std::fmt;
 
 use crate::value_object::ValueEnum;
 
+/// OAuth 2.0 token type (RFC 6750).
+///
+/// Used in the `token_type` field of token endpoint responses. Currently only
+/// `Bearer` tokens are supported.
+///
+/// # Specification
+///
+/// - RFC 6750: The OAuth 2.0 Authorization Framework: Bearer Token Usage
 #[derive(Debug, Clone, PartialEq, Eq, Hash)]
 pub enum TokenType {
+    /// Bearer token (RFC 6750). The most widely used token type.
     Bearer,
 }
 

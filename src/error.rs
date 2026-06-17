@@ -1,16 +1,38 @@
 use std::fmt;
 
+/// OAuth 2.0 error code defined in RFC 6749 Section 5.2 / Section 4.1.2.1.
+///
+/// Each variant corresponds to the RFC wire-format string (snake_case).
+/// The [`Display`] implementation returns that string.
+///
+/// # Examples
+///
+/// ```rust,ignore
+/// use domain::error::OAuthErrorCode;
+///
+/// assert_eq!(OAuthErrorCode::InvalidRequest.to_string(), "invalid_request");
+/// ```
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub enum OAuthErrorCode {
+    /// The resource owner or authorization server denied the request.
     AccessDenied,
+    /// Client authentication failed (e.g. unregistered client, invalid secret).
     InvalidClient,
+    /// The provided authorization grant is invalid, expired, revoked, or the redirect URI mismatches.
     InvalidGrant,
+    /// The request is missing a required parameter or contains an invalid value.
     InvalidRequest,
+    /// The requested scope is invalid, unknown, or malformed.
     InvalidScope,
+    /// An unexpected error occurred at the authorization server.
     ServerError,
+    /// The authorization server is temporarily overloaded or under maintenance.
     TemporarilyUnavailable,
+    /// The authenticated client is not authorized to use this grant type.
     UnauthorizedClient,
+    /// The authorization grant type is not supported by the authorization server.
     UnsupportedGrantType,
+    /// The response type is not supported by the authorization server.
     UnsupportedResponseType,
 }
 
@@ -33,6 +55,29 @@ impl std::fmt::Display for OAuthErrorCode {
 
 impl std::error::Error for OAuthErrorCode {}
 
+/// OAuth 2.0 error response type defined in RFC 6749 Section 5.2.
+///
+/// Holds an error code, an optional human-readable description, and an optional
+/// reference URI.
+///
+/// # Fields
+///
+/// - `error` — error code (see [`OAuthErrorCode`])
+/// - `error_description` — additional description of the error (optional)
+/// - `error_uri` — URI of a page with information about the error (optional)
+///
+/// # Examples
+///
+/// ```rust,ignore
+/// use domain::error::{OAuthError, OAuthErrorCode};
+///
+/// let err = OAuthError::new(
+///     OAuthErrorCode::InvalidRequest,
+///     Some("missing parameter: response_type".to_string()),
+///     None,
+/// );
+/// assert_eq!(err.to_string(), "invalid_request: missing parameter: response_type");
+/// ```
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct OAuthError {
     error: OAuthErrorCode,
@@ -41,6 +86,13 @@ pub struct OAuthError {
 }
 
 impl OAuthError {
+    /// Creates a new [`OAuthError`].
+    ///
+    /// # Arguments
+    ///
+    /// - `error` — error code
+    /// - `error_description` — human-readable error description (optional)
+    /// - `error_uri` — URI of the error detail page (optional)
     pub fn new(
         error: OAuthErrorCode,
         error_description: Option<String>,
@@ -53,12 +105,17 @@ impl OAuthError {
         }
     }
 
+    /// Returns a reference to the error code.
     pub fn error(&self) -> &OAuthErrorCode {
         &self.error
     }
+
+    /// Returns a reference to the error description, or `None` if unset.
     pub fn error_description(&self) -> Option<&String> {
         self.error_description.as_ref()
     }
+
+    /// Returns a reference to the error detail page URI, or `None` if unset.
     pub fn error_uri(&self) -> Option<&String> {
         self.error_uri.as_ref()
     }

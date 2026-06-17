@@ -2,16 +2,45 @@ use std::fmt;
 use subtle::ConstantTimeEq;
 use zeroize::Zeroize;
 
-/// 秘密情報を保持する汎用ラッパー。
-/// Debug/Display/PartialEq/Eq をこの型自身が一元管理することで、
-/// 個々の値オブジェクト側に漏洩経路を作る余地をなくす。
+/// Generic wrapper type for holding secret data safely.
+///
+/// By centralizing `Debug`, `Display`, `PartialEq`, and `Eq` in this type,
+/// individual value objects have no room to introduce leakage paths.
+///
+/// # Security Properties
+///
+/// - `Debug` and `Display` always output `"[REDACTED]"` and never leak the
+///   internal value.
+/// - `PartialEq` uses constant-time comparison via [`subtle::ConstantTimeEq`] to
+///   prevent timing attacks.
+/// - On `Drop`, calls [`zeroize::Zeroize::zeroize`] to zero out memory.
+///
+/// # Type Constraints
+///
+/// The type parameter `T` must satisfy `AsRef<[u8]> + Zeroize`. Common examples
+/// are `String` and `Vec<u8>`.
+///
+/// # Examples
+///
+/// ```rust,ignore
+/// use domain::secret::Secret;
+///
+/// let secret = Secret::new("my-password".to_string());
+/// assert_eq!(format!("{secret}"), "[REDACTED]");
+/// let raw = secret.expose_secret();
+/// ```
 pub struct Secret<T: AsRef<[u8]> + Zeroize>(T);
 
 impl<T: AsRef<[u8]> + Zeroize> Secret<T> {
+    /// Wraps secret data and creates a new [`Secret`].
     pub fn new(value: T) -> Self {
         Self(value)
     }
 
+    /// Returns a reference to the wrapped secret data.
+    ///
+    /// Using the explicit name `expose_secret` instead of `value()` encourages
+    /// callers to recognize that they are deliberately extracting secret data.
     pub fn expose_secret(&self) -> &T {
         &self.0
     }

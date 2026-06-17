@@ -2,8 +2,10 @@ use crate::secret::Secret;
 use crate::value_object::{SecretValueObject, ValueObjectError};
 use std::fmt;
 
+/// Validation error for [`AccessToken`].
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub enum AccessTokenError {
+    /// The access token is empty or whitespace only.
     Empty,
 }
 
@@ -19,6 +21,13 @@ impl fmt::Display for AccessTokenError {
 
 impl std::error::Error for AccessTokenError {}
 
+/// Secret value object representing an OAuth 2.0 access token (RFC 6749 Section 1.4).
+///
+/// Credential used to access protected resources. Wrapped in [`Secret<String>`],
+/// so `Debug` and `Display` output `"[REDACTED]"`. Use [`expose_secret`] to
+/// extract the value.
+///
+/// [`expose_secret`]: crate::value_object::SecretValueObject::expose_secret
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct AccessToken(Secret<String>);
 

@@ -1,10 +1,9 @@
 use std::time::Duration;
 
-/// クライアント単位のトークン有効期限（TTL）設定。
+/// Per-client token time-to-live (TTL) settings.
 ///
-/// 各フィールドの `None` は「クライアント固有の設定なし」を表し、
-/// サーバ既定の TTL を使用する意図である。`Some(duration)` の場合は
-/// そのクライアントに対して既定値を上書きする。
+/// `None` for each field means no client-specific setting; the server default
+/// TTL is used. `Some(duration)` overrides the default for that client.
 #[derive(Debug, Clone)]
 pub struct ClientTokenTtl {
     access_token_ttl: Option<Duration>,
@@ -13,6 +12,10 @@ pub struct ClientTokenTtl {
 }
 
 impl ClientTokenTtl {
+    /// Creates a new [`ClientTokenTtl`].
+    ///
+    /// Passing `None` for any argument means no client-specific setting (use
+    /// the server default).
     pub fn new(
         access_token_ttl: Option<Duration>,
         refresh_token_ttl: Option<Duration>,
@@ -25,22 +28,32 @@ impl ClientTokenTtl {
         }
     }
 
+    /// Returns the access token TTL. `None` means the server default is used.
     pub fn access_token_ttl(&self) -> Option<&Duration> {
         self.access_token_ttl.as_ref()
     }
+
+    /// Returns the refresh token TTL. `None` means the server default is used.
     pub fn refresh_token_ttl(&self) -> Option<&Duration> {
         self.refresh_token_ttl.as_ref()
     }
+
+    /// Returns the authorization code TTL. `None` means the server default is used.
     pub fn authorization_code_ttl(&self) -> Option<&Duration> {
         self.authorization_code_ttl.as_ref()
     }
 
+    /// Sets the access token TTL. Passing `None` reverts to the server default.
     pub fn set_access_token_ttl(&mut self, access_token_ttl: Option<Duration>) {
         self.access_token_ttl = access_token_ttl
     }
+
+    /// Sets the refresh token TTL. Passing `None` reverts to the server default.
     pub fn set_refresh_token_ttl(&mut self, refresh_token_ttl: Option<Duration>) {
         self.refresh_token_ttl = refresh_token_ttl
     }
+
+    /// Sets the authorization code TTL. Passing `None` reverts to the server default.
     pub fn set_authorization_code_ttl(&mut self, authorization_code_ttl: Option<Duration>) {
         self.authorization_code_ttl = authorization_code_ttl
     }

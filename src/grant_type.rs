@@ -2,11 +2,28 @@ use std::fmt;
 
 use crate::value_object::ValueEnum;
 
+/// OAuth 2.0 grant type defined in RFC 6749.
+///
+/// Used as the `grant_type` parameter in requests to the token endpoint.
+/// The [`Display`] implementation returns the RFC wire-format string.
+///
+/// # Variants
+///
+/// | Variant | Wire Value | RFC Section |
+/// |---|---|---|
+/// | `AuthorizationCode` | `authorization_code` | 4.1 |
+/// | `Password` | `password` | 4.3 |
+/// | `ClientCredentials` | `client_credentials` | 4.4 |
+/// | `RefreshToken` | `refresh_token` | 6 |
 #[derive(Debug, Clone, PartialEq, Eq, Hash)]
 pub enum GrantType {
+    /// Authorization code grant (RFC 6749 Section 4.1).
     AuthorizationCode,
+    /// Resource owner password credentials grant (RFC 6749 Section 4.3).
     Password,
+    /// Client credentials grant (RFC 6749 Section 4.4).
     ClientCredentials,
+    /// Refresh token grant (RFC 6749 Section 6).
     RefreshToken,
 }
 

@@ -2,8 +2,10 @@ use crate::secret::Secret;
 use crate::value_object::{SecretValueObject, ValueObjectError};
 use std::fmt;
 
+/// Validation error for [`PasswordHash`].
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub enum PasswordHashError {
+    /// The password hash is empty or whitespace only.
     Empty,
 }
 
@@ -19,6 +21,13 @@ impl fmt::Display for PasswordHashError {
 
 impl std::error::Error for PasswordHashError {}
 
+/// Secret value object holding a password hash.
+///
+/// Stores a hashed string (e.g. from `bcrypt` or `argon2`), not the plaintext
+/// password. Wrapped in [`Secret<String>`], so `Debug` and `Display` output
+/// `"[REDACTED]"`. Use [`expose_secret`] to extract the hash value.
+///
+/// [`expose_secret`]: crate::value_object::SecretValueObject::expose_secret
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct PasswordHash(Secret<String>);
 

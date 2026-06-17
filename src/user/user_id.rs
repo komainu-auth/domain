@@ -1,8 +1,10 @@
 use crate::value_object::{ValueObject, ValueObjectError};
 use std::fmt;
 
+/// Validation error for [`UserId`].
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub enum UserIdError {
+    /// The user ID is empty or whitespace only.
     Empty,
 }
 
@@ -18,6 +20,20 @@ impl std::fmt::Display for UserIdError {
 
 impl std::error::Error for UserIdError {}
 
+/// Value object that uniquely identifies a user.
+///
+/// Rejects empty or whitespace-only values at construction time. Leading and
+/// trailing whitespace is trimmed automatically.
+///
+/// # Examples
+///
+/// ```rust,ignore
+/// use domain::user::UserId;
+/// use domain::value_object::ValueObject;
+///
+/// let id = UserId::new("user-001".to_string()).unwrap();
+/// assert_eq!(id.value(), "user-001");
+/// ```
 #[derive(Debug, Clone, PartialEq, Eq, Hash)]
 pub struct UserId(String);
 

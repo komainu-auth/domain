@@ -2,8 +2,10 @@ use crate::secret::Secret;
 use crate::value_object::{SecretValueObject, ValueObjectError};
 use std::fmt;
 
+/// Validation error for [`AuthorizationCode`].
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub enum AuthorizationCodeError {
+    /// The authorization code is empty or whitespace only.
     Empty,
 }
 
@@ -19,6 +21,15 @@ impl fmt::Display for AuthorizationCodeError {
 
 impl std::error::Error for AuthorizationCodeError {}
 
+/// Secret value object representing an OAuth 2.0 authorization code (RFC 6749 Section 4.1.2).
+///
+/// A short-lived token issued by the authorization endpoint and used in requests
+/// to the token endpoint.
+///
+/// Wrapped in [`Secret<String>`], so `Debug` and `Display` output `"[REDACTED]"`.
+/// Use [`expose_secret`] to extract the value.
+///
+/// [`expose_secret`]: crate::value_object::SecretValueObject::expose_secret
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct AuthorizationCode(Secret<String>);
 

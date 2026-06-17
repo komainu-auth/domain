@@ -2,9 +2,19 @@ use std::fmt;
 
 use crate::value_object::ValueEnum;
 
+/// OAuth 2.0 client type defined in RFC 6749 Section 2.1.
+///
+/// Distinguishes whether a client can securely hold a secret.
+///
+/// | Variant | Wire Value | Description |
+/// |---|---|---|
+/// | `Confidential` | `confidential` | Clients that can securely hold a secret (e.g. server-side apps) |
+/// | `Public` | `public` | Clients that cannot securely hold a secret (e.g. SPAs, native apps) |
 #[derive(Debug, Clone, PartialEq, Eq, Hash)]
 pub enum ClientType {
+    /// A client that cannot securely hold a secret (e.g. SPA, mobile app).
     Public,
+    /// A client that can securely hold a secret (e.g. server-side app).
     Confidential,
 }
 

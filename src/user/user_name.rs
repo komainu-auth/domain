@@ -1,8 +1,10 @@
 use crate::value_object::{ValueObject, ValueObjectError};
 use std::fmt;
 
+/// Validation error for [`UserName`].
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub enum UserNameError {
+    /// The username is empty or whitespace only.
     Empty,
 }
 
@@ -18,6 +20,22 @@ impl std::fmt::Display for UserNameError {
 
 impl std::error::Error for UserNameError {}
 
+/// Value object representing a username.
+///
+/// Used as the `username` parameter in the password grant (RFC 6749 Section 4.3).
+///
+/// Rejects empty or whitespace-only values at construction time. Leading and
+/// trailing whitespace is trimmed automatically.
+///
+/// # Examples
+///
+/// ```rust,ignore
+/// use domain::user::UserName;
+/// use domain::value_object::ValueObject;
+///
+/// let name = UserName::new("alice".to_string()).unwrap();
+/// assert_eq!(name.value(), "alice");
+/// ```
 #[derive(Debug, Clone, PartialEq, Eq, Hash)]
 pub struct UserName(String);
 
