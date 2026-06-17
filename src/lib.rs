@@ -1,6 +1,7 @@
 pub mod client;
 pub mod code;
 pub mod entity;
+pub mod error;
 pub mod request;
 pub mod secret;
 pub mod token;
