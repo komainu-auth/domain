@@ -11,6 +11,7 @@
 //! - [`error`] — OAuth 2.0 error codes and error types
 //! - [`request`] — authorization requests and token requests
 //! - [`secret`] — generic wrapper for holding secrets safely
+//! - [`session`] — session entity and session ID value object
 //! - [`token`] — access tokens, refresh tokens, and related records
 //! - [`user`] — user entity and related value objects
 //! - [`value_object`] — value object foundation traits
@@ -25,6 +26,7 @@ pub mod entity;
 pub mod error;
 pub mod request;
 pub mod secret;
+pub mod session;
 pub mod token;
 pub mod user;
 pub mod value_object;
